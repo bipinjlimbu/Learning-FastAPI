@@ -14,3 +14,8 @@ class TodoItem(BaseModel):
 def create_todo_item(todo: TodoItem):
     todos.append(todo)
     return {"message": "Todo item created successfully", "todo": todo}
+
+@app.get("/todos")
+def get_todo_items():
+    return {"todos": todos}
+
