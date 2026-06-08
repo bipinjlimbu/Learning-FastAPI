@@ -25,3 +25,11 @@ def get_todo_item(todo_id: int):
         if todo.id == todo_id:
             return {"todo": todo}
     return {"message": "Todo item not found"}
+
+@app.put("/todos/{todo_id}")
+def update_todo_item(todo_id: int, updated_todo: TodoItem):
+    for index, todo in enumerate(todos):
+        if todo.id == todo_id:
+            todos[index] = updated_todo
+            return {"message": "Todo item updated successfully", "todo": updated_todo}
+    return {"message": "Todo item not found"}
