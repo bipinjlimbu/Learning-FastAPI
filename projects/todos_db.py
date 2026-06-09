@@ -36,3 +36,10 @@ def create_todo(title: str, completed: str = "false", db: Session = Depends(get_
         "message": "Todo item created successfully",
         "data": todo
     }
+    
+@app.get("/todos")
+def read_todos(db: Session = Depends(get_db)):
+    todos = db.query(TodoItem).all()
+    return {
+        "todos": todos
+    }
