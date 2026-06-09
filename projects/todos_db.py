@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import sessionmaker, declarative_base, Session
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
 
 DATABASE_URL = "sqlite:///./todos.db"
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
@@ -42,4 +42,14 @@ def read_todos(db: Session = Depends(get_db)):
     todos = db.query(TodoItem).all()
     return {
         "todos": todos
+    }
+
+@app.get("/todos/{todo_id}")
+def read_todo(todo_id: int, db: Session = Depends(get_db)):
+    todo = db.query(TodoItem).filter(TodoItem.id == todo_id).first()
+    if not todo:
+        raise HTTPException(status_code=404, detail="Todo item not found")
+    
+    return {
+        "todo": todo
     }
